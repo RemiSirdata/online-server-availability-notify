@@ -151,7 +151,7 @@ func (b *Bot) updateChannel() {
 	go func() {
 		listener := b.Crawler.AddListener()
 		for server := range listener.Chan {
-			if server.ServerAvailable != server.PreviousAvailability {
+			if server.ServerAvailable > server.PreviousAvailability {
 				b.AppContext.Logger.Debug(fmt.Sprintf("Server update : %v", server))
 				_, t, err := b.GetClient().PostMessage(b.AppContext.ChannelName, server.GetAvailabilityMessage(), slack.PostMessageParameters{})
 				if err != nil {
