@@ -14,7 +14,10 @@ type Server struct {
 }
 
 func (s *Server) GetAvailabilityMessage() string {
-	return fmt.Sprintf(MESSAGE_SERVER_AVAILABILITY, s.Range, s.Name, s.ServerAvailable, s.PreviousAvailability)
+	if s.PreviousAvailability >= s.ServerAvailable {
+		return fmt.Sprintf(MESSAGE_SERVER_AVAILABILITY_REDUCE, s.Name, s.ServerAvailable, s.PreviousAvailability)
+	}
+	return fmt.Sprintf(MESSAGE_SERVER_AVAILABILITY, s.Name, s.ServerAvailable, s.PreviousAvailability)
 }
 
 type ServerList struct {
