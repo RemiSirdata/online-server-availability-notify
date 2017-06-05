@@ -20,6 +20,10 @@ func (s *Server) GetAvailabilityMessage() string {
 	return fmt.Sprintf(MESSAGE_SERVER_AVAILABILITY, s.Name, s.ServerAvailable, s.PreviousAvailability)
 }
 
+func (s *Server) GetStatus() string {
+	return fmt.Sprintf(MESSAGE_SERVER_STATUS, s.Name, s.ServerAvailable)
+}
+
 type ServerList struct {
 	Servers map[string]*Server
 }

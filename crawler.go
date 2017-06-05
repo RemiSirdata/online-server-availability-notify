@@ -46,12 +46,16 @@ func (c *Crawler) listenAddListener() {
 }
 
 func (c *Crawler) AddListener() *Listener {
+	return c.AddListenerForServer("")
+}
+
+func (c *Crawler) AddListenerForServer(serverName string) *Listener {
 	if !c.started {
 		c.StartCrawl()
 	}
 	l := Listener{
 		make(chan Server),
-		"",
+		serverName,
 	}
 	c.addListener <- &l
 	return &l
@@ -67,7 +71,11 @@ func (c *Crawler) StartCrawl() {
 }
 
 func (c *Crawler) checkAvailability() {
-	resp, _ := http.Get(ONLINE_PAGE_SERVER_LIST)
+	resp, err := http.Get(ONLINE_PAGE_SERVER_LIST)
+	if err != nil {
+		c.AppContext.Logger.Error(fmt.Sprintf("Fail to get %s : %s", ONLINE_PAGE_SERVER_LIST, err.Error()))
+		return
+	}
 	defer resp.Body.Close()
 	root, err := html.Parse(resp.Body)
 	if err != nil {
